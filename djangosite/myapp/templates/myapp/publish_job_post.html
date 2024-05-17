@@ -1,0 +1,32 @@
+<!-- recruitment/templates/recruitment/publish_job_post.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Publish Job Posting</title>
+</head>
+<body>
+    <h1>Publish Job Posting</h1>
+    <form method="post" action="{% url 'pending_to_publish' %}">
+        {% csrf_token %}
+
+        <!-- Add checkboxes to select job publishing portals -->
+        <label for="portal1">
+            <input type="checkbox" id="portal1" name="portals" value="portal1"> Portal 1
+        </label><br>
+        <label for="portal2">
+            <input type="checkbox" id="portal2" name="portals" value="portal2"> Portal 2
+        </label><br>
+      <label for="portal1">
+            <input type="checkbox" id="portal3" name="portals" value="portal1"> Portal 3
+        </label><br>
+        <label for="portal2">
+            <input type="checkbox" id="portal4" name="portals" value="portal2"> Portal 4
+        </label><br>
+        <!-- Add more checkboxes as needed -->
+
+        <button type="submit">Publish</button>
+    </form>
+</body>
+</html>

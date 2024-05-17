@@ -1,0 +1,143 @@
+<!--&lt;!&ndash; request_leave.html &ndash;&gt;-->
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Request Leave</title>-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>-->
+<!--    <script>-->
+<!--        $(function() {-->
+<!--            $("#start_date").datepicker();-->
+<!--            $("#end_date").datepicker();-->
+<!--        });-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h2>Request Leave</h2>-->
+<!--    <form method="post">-->
+<!--        {% csrf_token %}-->
+<!--        <label for="employee_id">Employee ID:</label><br>-->
+<!--        <input type="text" id="employee_id" name="employee_id" required><br><br>-->
+
+<!--        <label for="leave_type">Leave Type:</label><br>-->
+<!--<select id="leave_type" name="leave_type" required>-->
+<!--    <option value="sick">Sick Leave</option>-->
+<!--    <option value="vacation">Vacation</option>-->
+<!--    <option value="personal">Personal Leave</option>-->
+<!--    <option value="bereavement">Bereavement Leave</option>-->
+<!--    <option value="maternity">Maternity Leave</option>-->
+<!--    &lt;!&ndash; Add more leave types as needed &ndash;&gt;-->
+<!--</select><br><br>-->
+
+
+<!--        <label for="start_date">Start Date:</label><br>-->
+<!--        <input type="text" id="start_date" name="start_date" required><br><br>-->
+
+<!--        <label for="end_date">End Date:</label><br>-->
+<!--        <input type="text" id="end_date" name="end_date" required><br><br>-->
+
+<!--        <label for="reason">Reason:</label><br>-->
+<!--        <textarea id="reason" name="reason" required></textarea><br><br>-->
+
+<!--        <input type="submit" value="Submit">-->
+<!--    </form>-->
+<!--</body>-->
+<!--</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Leave</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        body {
+            background-color: antiquewhite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .teacher {
+            color: blue;
+        }
+        .student {
+            color: red;
+            border: 4px dotted greenyellow;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 100%;
+        }
+        .coapps {
+            color: goldenrod;
+            border: 2px solid navy;
+        }
+        .coapps-input {
+            border: 2px solid navy;
+        }
+    </style>
+    <script>
+        $(function() {
+            $("#start_date").datepicker();
+            $("#end_date").datepicker();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-container">
+                    <h2 class="text-center" style="color: tomato;">Request Leave</h2>
+                    <form method="post">
+                        <div style="display: none;">{% csrf_token %}</div>
+                        <div class="form-group">
+                            <label for="employee_id">Employee ID:</label>
+                            <input type="text" class="form-control" id="employee_id" name="employee_id" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="teacher" for="leave_type">Leave Type:</label>
+                            <select class="form-control coapps" id="leave_type" name="leave_type" required>
+                                <option class="student" value="sick">Sick Leave</option>
+                                <option class="student" value="vacation">Vacation</option>
+                                <option class="student" value="personal">Personal Leave</option>
+                                <option class="student" value="bereavement">Bereavement Leave</option>
+                                <option class="student" value="maternity">Maternity Leave</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="teacher" for="start_date">Start Date:</label>
+                            <input type="text" class="form-control coapps-input" id="start_date" name="start_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="teacher" for="end_date">End Date:</label>
+                            <input type="text" class="form-control coapps-input" id="end_date" name="end_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="teacher" for="reason">Reason:</label>
+                            <textarea class="form-control coapps-input" id="reason" name="reason" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary coapps">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

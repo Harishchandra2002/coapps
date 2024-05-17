@@ -1,0 +1,32 @@
+<!-- recruitment/templates/recruitment/job_post_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Post List</title>
+</head>
+<body>
+    <h1>Job Post List</h1>
+    <ul>
+        {% for job_post in job_posts %}
+            <li>
+                <h2>{{ job_post.title }}</h2>
+                <p>{{ job_post.description }}</p>
+                <!-- Add other fields here as needed -->
+                <form method="post" action="{% url 'publish_job_post1' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="job_post_id" value="{{ job_post.id }}">
+                    <button type="submit">Publish</button>
+                </form>
+                <form method="post" action="{% url 'delete_job_post' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="job_post_id" value="{{ job_post.id }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No job posts available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

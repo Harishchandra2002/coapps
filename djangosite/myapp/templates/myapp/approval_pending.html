@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Approval</title>
+</head>
+<body>
+    <h1>Pending Registrations</h1>
+    <form method="post">
+        {% csrf_token %}
+        {% for employee in registrations %}
+            <!-- Display registration details -->
+            <input type="checkbox" name="approve[]" value="{{ employee.id }}"> Approve {{ employee.name }}<br>
+        {% endfor %}
+        <button type="submit">Approve Selected</button>
+    </form>
+</body>
+</html>

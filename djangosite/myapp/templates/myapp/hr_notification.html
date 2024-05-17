@@ -1,0 +1,32 @@
+<!-- hr_notification.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave Request Notification</title>
+</head>
+<body>
+    <h2>Leave Request Notification</h2>
+    <p>Employee ID: {{ emp_id }}</p>
+    <p>Employee Name: {{ emp_name }}</p>
+    <p>Leave Balance: {{ leave_balance }}</p>
+    <p>Start Date: {{ start_date }}</p>
+    <p>End Date: {{ end_date }}</p>
+    <p>Leave Type: {{ leave_type }}</p>
+    <p>Reason: {{ reason }}</p>
+
+    <form method="post" action="{% url 'approve_leave' %}">
+        {% csrf_token %}
+        <input type="hidden" name="emp_id" value="{{ emp_id }}">
+        <input type="submit" name="action" value="Approve">
+    </form>
+
+    <form method="post" action="{% url 'reject_leave' %}">
+        {% csrf_token %}
+        <input type="hidden" name="emp_id" value="{{ emp_id }}">
+        <input type="submit" name="action" value="Reject">
+    </form>
+</body>
+</html>
