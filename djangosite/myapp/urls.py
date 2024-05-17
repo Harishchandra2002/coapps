@@ -35,5 +35,10 @@ urlpatterns = [
     path('publish_job_post1/', views.publish_job_post1, name='publish_job_post1'),
     path('pending_to_publish/', views.pending_to_publish, name='pending_to_publish'),
     path('main/', views.main1, name='main'),
+    path('login/',views.login,name='login'),
+    path('login_to_submit/',views.login_to_submit,name='login_to_submit'),
+    path('hr_dashboard/<str:emp_id>/', views.hr_dashboard, name='hr_dashboard'),
+    path('employee_dashboard/<str:emp_id>/', views.employee_dashboard, name='employee_dashboard'),
+    path('pending_leave_requests/', views.pending_leave_requests_page, name='pending_leave_requests'),
 
 ]

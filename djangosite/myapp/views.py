@@ -1,13 +1,15 @@
-from django.http import JsonResponse
+from datetime import datetime
+
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from .forms import EmployeeRegistrationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login
 from django.contrib import messages
 from django.utils import timezone
-from .forms import JobPostForm
+from .forms import JobPostForm,LeaveRequestForm
 from django.core.mail import send_mail, EmailMessage
-from .models import Employee, Employee_Data, JobPost
+from .models import Employee, Employee_Data, JobPost,LeaveRequest
 from django.template.loader import render_to_string
 
 
@@ -48,8 +50,37 @@ def publish_job_post1(request):
 def main1(request):
     return render(request, "myapp/main.html")
 
+def login(request):
+    return render(request,"myapp/login.html")
 
 
+def hr_dashboard(request):
+    return render(request, "myapp/hr_dashboard.html")
+
+def employee_dashboard(request):
+    return render(request, "myapp/hr_dashboard.html")
+
+def login_to_submit(request):
+    if request.method == 'POST':
+        employee_id = request.POST.get('employeeId')
+        password = request.POST.get('password')
+
+        try:
+            employee = Employee_Data.objects.get(emp_id=employee_id, password=password)
+            if employee_id.startswith('6'):
+                # Redirect to HR page
+                return redirect('hr_dashboard')
+            elif employee_id.startswith('5'):
+                # Redirect to employee page
+                return redirect('employee_dashboard')
+            else:
+                # Invalid employee ID format
+                messages.error(request, 'Invalid employee ID format.')
+                return redirect('login')
+        except Employee_Data.DoesNotExist:
+            messages.error(request, 'Invalid credentials. Please try again.')
+
+    return render(request, "myapp/login.html")
 
 def pending_to_publish(request):
     return delete_job_post(request)
@@ -109,21 +140,62 @@ def index(request):
 # views.py
 
 
+# def request_leave(request):
+#     if request.method == 'POST':
+#         # Handle form submission
+#         # Fetch additional employee data from the database
+#         employee_id = request.POST.get('employee_id')
+#         employee_data = Employee_Data.objects.filter(emp_id=employee_id).first()
+#         emp_name = employee_data.employee_name
+#         leave_balance = employee_data.leave_balance
+#
+#         # Send email notification to HR
+#         send_leave_request_notification_to_hr(request.POST, emp_name, leave_balance)
+#         # return redirect('leave_balance')
+#     return render(request, 'myapp/request_leave.html')
+
+
 def request_leave(request):
     if request.method == 'POST':
         # Handle form submission
-        # Fetch additional employee data from the database
         employee_id = request.POST.get('employee_id')
+        leave_type = request.POST.get('leave_type')
+        start_date_str: str = request.POST.get('start_date')
+        end_date_str: str = request.POST.get('end_date')
+
+        # Convert date strings to YYYY-MM-DD format
+        start_date = datetime.strptime(start_date_str, '%m/%d/%Y').strftime('%Y-%m-%d')
+        end_date = datetime.strptime(end_date_str, '%m/%d/%Y').strftime('%Y-%m-%d')
+
+        reason = request.POST.get('reason')
+
+
+        # Fetch additional employee data from the database
         employee_data = Employee_Data.objects.filter(emp_id=employee_id).first()
-        emp_name = employee_data.employee_name
-        leave_balance = employee_data.leave_balance
+        if employee_data:
+            emp_name = employee_data.employee_name
+            leave_balance = employee_data.leave_balance
 
-        # Send email notification to HR
-        send_leave_request_notification_to_hr(request.POST, emp_name, leave_balance)
-        # return redirect('leave_balance')
+            # Save the leave request data to the LeaveRequest table
+            leave_request = LeaveRequest.objects.create(employee_id=employee_id, leave_type=leave_type,
+                                                        start_date=start_date, end_date=end_date,
+                                                        reason=reason)
+
+            # Send email notification to HR
+            send_leave_request_notification_to_hr({
+                'employee_id': employee_id,
+                'start_date': start_date,
+                'end_date': end_date,
+                'reason': reason,
+                'leave_type': leave_type,
+            }, emp_name, leave_balance)
+
+            # Optionally, you can redirect the user to a success page
+            return redirect('leave_balance')
+        else:
+            return HttpResponseBadRequest("Employee data not found")
+
     return render(request, 'myapp/request_leave.html')
-
-
 def approve_leave(request):
     if request.method == 'POST':
         emp_id = request.POST.get('emp_id')
@@ -274,3 +346,11 @@ def approval_pending(request):
     else:
         # Handle case when there are no Employee objects in the database
         return JsonResponse({'error': 'No employee data found'}, status=404)
+
+
+def pending_leave_requests_page(request):
+    # Retrieve pending leave requests from the database
+    pending_leave_requests = LeaveRequest.objects.filter(status='pending')
+
+    # Pass the pending leave requests data to the template
+    return render(request, 'myapp/leave_request_page_to_hr.html', {'pending_leave_requests': pending_leave_requests})

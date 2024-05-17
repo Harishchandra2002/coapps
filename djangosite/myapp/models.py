@@ -44,3 +44,23 @@ class JobPost(models.Model):
 
     class Meta:
         db_table = "job_post"
+
+
+class LeaveRequest(models.Model):
+    PENDING = 'pending'
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (APPROVED, 'Approved'),
+        (REJECTED, 'Rejected'),
+    ]
+
+    employee_id = models.IntegerField()
+    leave_type = models.CharField(max_length=100)
+    start_date = models.DateField(null=True)
+    end_date = models.DateField(null=True)
+    reason = models.TextField()
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=PENDING)
+    class Meta:
+        db_table = "LeaveRequest"
